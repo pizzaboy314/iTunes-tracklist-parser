@@ -14,6 +14,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,19 +36,22 @@ public class Worker {
 
 	private static JFrame resultFrame;
 	private static JTextArea resultText;
+	private static JFileChooser fc;
+	private static File resultFile;
+	
+	private static Integer discCount;
 	private static String resultString;
 	private static String albumTitle;
 	private static String releaseDate;
-	private static String tracklist;
-	private static File resultFile;
-	private static JFileChooser fc;
+	private static List<AlbumTrack> tracklist;
 
 	public static void main(String[] args) {
 		resultWindow();
 		
+		discCount = 1;
 		albumTitle = "";
 		releaseDate = "";
-		tracklist = "";
+		tracklist = new ArrayList<AlbumTrack>();
 
 		String albumURL = null;
 		
@@ -61,14 +67,23 @@ public class Worker {
 		}
 
 		parseHTML(albumURL);
-
-		resultString = albumTitle + "\n" + releaseDate + "\n\n" + tracklist;
+		
+		resultString = albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\n" + albumURL;
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		System.out.println();
 
+	}
+	
+	public static String tracklistAsText(){
+		StringBuilder sb = new StringBuilder();
+		for(AlbumTrack at : tracklist){
+			String discPrefix = (discCount == 1) ? "" : (at.discNum + ".");
+			sb.append(discPrefix + at.trackNum + "|" + at.trackTitle + "|" + at.trackDuration + "\n");
+		}
+		return sb.toString();
 	}
 
 	public static void parseHTML(String input) {
@@ -90,7 +105,6 @@ public class Worker {
 		frame.setVisible(true);
 
 		String url = input;
-		StringBuilder sb = new StringBuilder();
 
 		try {
 			URL source = null;
@@ -143,7 +157,6 @@ public class Worker {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		tracklist = sb.toString();
 	}
 
 	public synchronized static void resultWindow() {

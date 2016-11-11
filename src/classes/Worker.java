@@ -38,9 +38,10 @@ public class Worker {
 	private static JTextArea resultText;
 	private static JFileChooser fc;
 	private static File resultFile;
+	private static String resultString;
 	
 	private static Integer discCount;
-	private static String resultString;
+	private static String artistName;
 	private static String albumTitle;
 	private static String releaseDate;
 	private static List<AlbumTrack> tracklist;
@@ -49,6 +50,7 @@ public class Worker {
 		resultWindow();
 		
 		discCount = 1;
+		artistName = "";
 		albumTitle = "";
 		releaseDate = "";
 		tracklist = new ArrayList<AlbumTrack>();
@@ -68,7 +70,7 @@ public class Worker {
 
 		parseHTML(albumURL);
 		
-		resultString = albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\n" + albumURL;
+		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\n" + albumURL;
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -142,6 +144,10 @@ public class Worker {
 						if(inputLine.contains("<h1 itemprop=\"name\">")){
 							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
 							albumTitle = s;
+							
+							inputLine = in.readLine();
+							String a = inputLine.substring(inputLine.indexOf("\"name\">")+7,inputLine.indexOf("</h2>"));
+							artistName = a;
 							loop = false;
 						} else {
 							inputLine = in.readLine();
@@ -172,7 +178,7 @@ public class Worker {
 		Dimension frameSize = new Dimension((int) (screenSize.width / 2), (int) (screenSize.height / 2));
 		int x = (int) (frameSize.width / 2);
 		int y = (int) (frameSize.height / 2);
-		resultFrame.setBounds(x, y, 400, frameSize.height);
+		resultFrame.setBounds(x, y, 600, frameSize.height);
 
 		resultText = new JTextArea();
 		resultText.setText("");

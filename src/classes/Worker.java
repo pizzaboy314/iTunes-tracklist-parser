@@ -34,14 +34,18 @@ public class Worker {
 	private static JFrame resultFrame;
 	private static JTextArea resultText;
 	private static String resultString;
-	private static String tracklist;
 	private static String albumTitle;
 	private static String releaseDate;
+	private static String tracklist;
 	private static File resultFile;
 	private static JFileChooser fc;
 
 	public static void main(String[] args) {
 		resultWindow();
+		
+		albumTitle = "";
+		releaseDate = "";
+		tracklist = "";
 
 		String albumURL = null;
 		
@@ -58,7 +62,7 @@ public class Worker {
 
 		parseHTML(albumURL);
 
-		resultString = albumTitle + "\n" + releaseDate + "\n" + tracklist;
+		resultString = albumTitle + "\n" + releaseDate + "\n\n" + tracklist;
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -113,7 +117,22 @@ public class Worker {
 			while (inputLine != null) {
 				// parsing starts here
 				if (inputLine.contains("release-date")) {
-					releaseDate = inputLine;
+					String s = inputLine.substring(inputLine.indexOf("Released:"));
+					s = s.substring(s.indexOf("content=\"")+9);
+					s = s.substring(0,s.indexOf("\">"));
+					releaseDate = s;
+				}
+				if(inputLine.contains("itemtype=\"http://schema.org/MusicAlbum\">")){
+					boolean loop = true;
+					while(loop == true){
+						if(inputLine.contains("<h1 itemprop=\"name\">")){
+							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
+							albumTitle = s;
+							loop = false;
+						} else {
+							inputLine = in.readLine();
+						}
+					}
 				}
 
 				inputLine = in.readLine();

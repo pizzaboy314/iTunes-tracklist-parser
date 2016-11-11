@@ -191,10 +191,15 @@ public class Worker {
 							
 							if(trackNum < lastTrackNum){
 								discCount++;
+							} else {
+								lastTrackNum = trackNum;
 							}
 							AlbumTrack at = new AlbumTrack(discCount, trackNum, trackTitle, trackDuration);
 							tracklist.add(at);
-							
+
+							inputLine = in.readLine();
+						} else {
+							inputLine = in.readLine();
 						}
 						if(inputLine.contains("</table>")){ // end of track table
 							loop = false;

@@ -59,7 +59,8 @@ public class Worker {
 		
 		System.out.println();
 		System.out.println();
-
+		
+		// https://itunes.apple.com/us/album/shut-up-n-play-yer-guitar/id551407424
 		albumURL = (String) JOptionPane.showInputDialog(null,
 				"Enter Apple Music album url: \n(Example: https://itunes.apple.com/us/album/abbey-road/id401186200)", "Enter Apple Music album url",
 				JOptionPane.PLAIN_MESSAGE, null, null, null);
@@ -128,17 +129,18 @@ public class Worker {
 			}
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(source.openStream()));
+			boolean tracksParsed = false;
 
 			String inputLine = in.readLine();
 			while (inputLine != null) {
-				// parsing starts here
+				// PARSING STARTS HERE
 				if (inputLine.contains("release-date")) {
 					String s = inputLine.substring(inputLine.indexOf("Released:"));
 					s = s.substring(s.indexOf("content=\"")+9);
 					s = s.substring(0,s.indexOf("\">"));
 					releaseDate = s;
 				}
-				if(inputLine.contains("itemtype=\"http://schema.org/MusicAlbum\">")){
+				if(inputLine.contains("itemtype=\"http://schema.org/MusicAlbum\">")){ // grab album title and artist name
 					boolean loop = true;
 					while(loop == true){
 						if(inputLine.contains("<h1 itemprop=\"name\">")){
@@ -151,6 +153,53 @@ public class Worker {
 							loop = false;
 						} else {
 							inputLine = in.readLine();
+						}
+					}
+				}
+				if(inputLine.contains("class=\"track-list album music\"") && tracksParsed == false){ // MAIN TRACK TABLE
+					Integer lastTrackNum = 0;
+					boolean loop = true;
+					while(loop == true){
+						if(inputLine.contains("itemtype=\"http://schema.org/MusicRecording\"")){ // a track line in table
+							Integer trackNum;
+							String trackTitle;
+							String trackDuration;
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+
+							// track number
+							trackNum = Integer.parseInt(inputLine.substring(inputLine.indexOf("<span>")+6,inputLine.indexOf("</span>")));
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							
+							// track title
+							trackTitle = inputLine.substring(inputLine.indexOf("\"text\">")+7,inputLine.indexOf("</span>"));
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							
+							// track duration
+							trackDuration = inputLine.substring(inputLine.indexOf("\"text\">")+7,inputLine.indexOf("</span>"));
+							
+							if(trackNum < lastTrackNum){
+								discCount++;
+							}
+							AlbumTrack at = new AlbumTrack(discCount, trackNum, trackTitle, trackDuration);
+							tracklist.add(at);
+							
+						}
+						if(inputLine.contains("</table>")){ // end of track table
+							loop = false;
+							tracksParsed = true;
+							Collections.sort(tracklist);
 						}
 					}
 				}

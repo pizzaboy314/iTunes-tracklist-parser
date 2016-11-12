@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,6 +45,7 @@ public class Worker {
 	private static String artistName;
 	private static String albumTitle;
 	private static String releaseDate;
+	private static String albumArworkURL;
 	private static List<AlbumTrack> tracklist;
 
 	public static void main(String[] args) {
@@ -53,6 +55,7 @@ public class Worker {
 		artistName = "";
 		albumTitle = "";
 		releaseDate = "";
+		albumArworkURL = "";
 		tracklist = new ArrayList<AlbumTrack>();
 
 		String albumURL = null;
@@ -60,7 +63,6 @@ public class Worker {
 		System.out.println();
 		System.out.println();
 		
-		// https://itunes.apple.com/us/album/shut-up-n-play-yer-guitar/id551407424
 		albumURL = (String) JOptionPane.showInputDialog(null,
 				"Enter Apple Music album url: \n(Example: https://itunes.apple.com/us/album/abbey-road/id401186200)", "Enter Apple Music album url",
 				JOptionPane.PLAIN_MESSAGE, null, null, null);
@@ -70,8 +72,10 @@ public class Worker {
 		}
 
 		parseHTML(albumURL);
+		downloadArtwork();
 		
-		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\n" + albumURL;
+		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\nSource URL:\n" + albumURL
+				+ "\n\nArtwork downloaded to Downloads/covers.";
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -80,6 +84,25 @@ public class Worker {
 
 	}
 	
+	public static void downloadArtwork() {
+		String downloadLoc = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "covers";
+		String filename = albumTitle.replaceAll("[\\/|:*?<>\"]", "") + ".jpg";
+		File path = new File(downloadLoc);
+		if (!path.exists())
+			path.mkdirs();
+
+		try {
+			URL url = new URL(albumArworkURL);
+			InputStream in = url.openStream();
+			File dest = new File(downloadLoc + File.separator + filename);
+			if (!dest.exists()) {
+				Files.copy(in, Paths.get(downloadLoc + File.separator + filename));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String tracklistAsText(){
 		StringBuilder sb = new StringBuilder();
 		for(AlbumTrack at : tracklist){
@@ -176,7 +199,8 @@ public class Worker {
 							inputLine = in.readLine();
 							
 							// track title
-							trackTitle = inputLine.substring(inputLine.indexOf("\"text\">")+7,inputLine.indexOf("</span>"));
+							String s = inputLine.substring(inputLine.indexOf("\"text\">") + 7);
+							trackTitle = s.substring(0, s.indexOf("</span>")).replace("&amp;", "&").replace("&quot;", "'");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
@@ -191,9 +215,8 @@ public class Worker {
 							
 							if(trackNum < lastTrackNum){
 								discCount++;
-							} else {
-								lastTrackNum = trackNum;
 							}
+							lastTrackNum = trackNum;
 							AlbumTrack at = new AlbumTrack(discCount, trackNum, trackTitle, trackDuration);
 							tracklist.add(at);
 
@@ -207,6 +230,14 @@ public class Worker {
 							Collections.sort(tracklist);
 						}
 					}
+				}
+				if (inputLine.contains("class=\"lockup product album music\">")) {
+					inputLine = in.readLine();
+					inputLine = in.readLine();
+					String thumbnailURL = inputLine.substring(inputLine.indexOf("src-swap-high-dpi=\"") + 19,
+							inputLine.indexOf("\" src-load-auto-after-dom-load"));
+					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/cover"));
+					albumArworkURL = "http://is5.mzstatic.com/image/thumb/" + artworkID + "/source/100000x100000-999.jpg";
 				}
 
 				inputLine = in.readLine();

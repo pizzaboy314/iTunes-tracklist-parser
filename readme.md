@@ -6,4 +6,4 @@ TRACK NUM|TRACK NAME|TRACK DURATION
 I was using iTunes as a source for a while, and getting it into that format through text manipulation.
 But that's stupid so I wrote this.
 
-[download executable](iTunes-tracklist-parser.jar)
+[download executable](https://github.com/pizzaboy314/iTunes-tracklist-parser/raw/master/iTunes-tracklist-parser.jar)

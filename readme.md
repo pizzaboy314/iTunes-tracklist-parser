@@ -1,5 +1,5 @@
 [RYM](https://rateyourmusic.com/) (soon to be Sonemic) is a music site much like IMDb for rating, cataloging, and finding new music.
-The advance tracklist input for adding a new album to the site is of the format:
+The advanced tracklist input for adding a new album to the site is of the format:
 
 TRACK NUM|TRACK NAME|TRACK DURATION
 

@@ -200,7 +200,8 @@ public class Worker {
 							
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("\"text\">") + 7);
-							trackTitle = s.substring(0, s.indexOf("</span>")).replace("&amp;", "&").replace("&quot;", "'");
+							trackTitle = s.substring(0, s.indexOf("</span>")).replace("&amp;", "&").replace("&quot;", "'").replace("’", "'")
+									.replace("é", "�");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();

@@ -237,7 +237,7 @@ public class Worker {
 					inputLine = in.readLine();
 					String thumbnailURL = inputLine.substring(inputLine.indexOf("src-swap-high-dpi=\"") + 19,
 							inputLine.indexOf("\" src-load-auto-after-dom-load"));
-					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/cover"));
+					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/source"));
 					albumArworkURL = "http://is5.mzstatic.com/image/thumb/" + artworkID + "/source/100000x100000-999.jpg";
 				}
 

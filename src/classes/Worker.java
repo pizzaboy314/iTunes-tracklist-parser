@@ -168,11 +168,11 @@ public class Worker {
 					while(loop == true){
 						if(inputLine.contains("<h1 itemprop=\"name\">")){
 							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
-							albumTitle = s;
+							albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 							
 							inputLine = in.readLine();
 							String a = inputLine.substring(inputLine.indexOf("\"name\">")+7,inputLine.indexOf("</h2>"));
-							artistName = a;
+							artistName = a.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 							loop = false;
 						} else {
 							inputLine = in.readLine();

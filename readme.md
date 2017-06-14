@@ -1,5 +1,3 @@
-CURRENTLY NOT WORKING, APPLE UPDATED THEIR WEB DESIGN AND BROKE THIS PROJECT ENTIRELY
-
 [EXECUTABLE DOWNLOAD LINK](https://github.com/pizzaboy314/iTunes-tracklist-parser/raw/master/iTunes-tracklist-parser.jar)
 ---
 [RYM](https://rateyourmusic.com/) (soon to be Sonemic) is a music site much like IMDb for rating, cataloging, and finding new music.

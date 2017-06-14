@@ -157,62 +157,58 @@ public class Worker {
 			String inputLine = in.readLine();
 			while (inputLine != null) {
 				// PARSING STARTS HERE
-				if (inputLine.contains("release-date")) {
-					String s = inputLine.substring(inputLine.indexOf("Released:"));
-					s = s.substring(s.indexOf("content=\"")+9);
-					s = s.substring(0,s.indexOf("\">"));
+				if (inputLine.contains("data-test-we-datetime datetime")) {
+					String s = inputLine.substring(inputLine.indexOf("data-test-we-datetime datetime")+30);
+					s = s.substring(s.indexOf("\">")+2, s.indexOf("</time>"));
 					releaseDate = s;
 				}
-				if(inputLine.contains("itemtype=\"http://schema.org/MusicAlbum\">")){ // grab album title and artist name
-					boolean loop = true;
-					while(loop == true){
-						if(inputLine.contains("<h1 itemprop=\"name\">")){
-							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
-							albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
-							
-							inputLine = in.readLine();
-							String a = inputLine.substring(inputLine.indexOf("\"name\">")+7,inputLine.indexOf("</h2>"));
-							artistName = a.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
-							loop = false;
-						} else {
-							inputLine = in.readLine();
-						}
-					}
+				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
+					inputLine = in.readLine();
+					
+					albumTitle = inputLine.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
+					
+					inputLine = in.readLine();
+					inputLine = in.readLine();
+					inputLine = in.readLine();
+					
+					artistName = inputLine.substring(inputLine.indexOf("we-link-to link")+17, inputLine.indexOf("</a>"))
+							.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
 				}
-				if(inputLine.contains("class=\"track-list album music\"") && tracksParsed == false){ // MAIN TRACK TABLE
+				if(inputLine.contains("product-hero__tracks") && tracksParsed == false){ // MAIN TRACK TABLE
 					Integer lastTrackNum = 0;
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("itemtype=\"http://schema.org/MusicRecording\"")){ // a track line in table
+						if(inputLine.contains("table__row__number t-table-body")){ // a track line in table
 							Integer trackNum;
 							String trackTitle;
 							String trackDuration;
 							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
+							if(inputLine.contains("<img")){
+								inputLine = in.readLine();
+							}
 
 							// track number
-							trackNum = Integer.parseInt(inputLine.substring(inputLine.indexOf("<span>")+6,inputLine.indexOf("</span>")));
+							trackNum = Integer.parseInt(inputLine.substring(inputLine.indexOf("we-media-preview ember-view")+37));
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							
 							// track title
-							String s = inputLine.substring(inputLine.indexOf("\"text\">") + 7);
-							trackTitle = s.substring(0, s.indexOf("</span>")).replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'")
-									.replace("Ã©", "é");
+							String s = inputLine.substring(inputLine.indexOf("t-table-headline we-truncate we-truncate--single-line ember-view") + 68);
+							trackTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
+									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
+							if(inputLine.contains("<img")){
+								inputLine = in.readLine();
+							}
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							
 							// track duration
-							trackDuration = inputLine.substring(inputLine.indexOf("\"text\">")+7,inputLine.indexOf("</span>"));
+							trackDuration = inputLine.substring(inputLine.indexOf("table__row__duration t-table-body")+35,inputLine.indexOf("</td>")).replace("<!---->","n/a");
 							
 							if(trackNum < lastTrackNum){
 								discCount++;
@@ -232,11 +228,9 @@ public class Worker {
 						}
 					}
 				}
-				if (inputLine.contains("class=\"lockup product album music\">")) {
-					inputLine = in.readLine();
-					inputLine = in.readLine();
-					String thumbnailURL = inputLine.substring(inputLine.indexOf("src-swap-high-dpi=\"") + 19,
-							inputLine.indexOf("\" src-load-auto-after-dom-load"));
+				if (inputLine.contains("product-artwork we-artwork--fullwidth we-artwork ember-view")) {
+					String thumbnailURL = inputLine.substring(inputLine.indexOf("<source srcset") + 16,
+							inputLine.indexOf(" 1x"));
 					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/source"));
 					albumArworkURL = "http://is5.mzstatic.com/image/thumb/" + artworkID + "/source/100000x100000-999.jpg";
 				}

@@ -160,7 +160,9 @@ public class Worker {
 				if (inputLine.contains("data-test-we-datetime datetime")) {
 					String s = inputLine.substring(inputLine.indexOf("data-test-we-datetime datetime")+30);
 					s = s.substring(s.indexOf("\">")+2, s.indexOf("</time>"));
-					releaseDate = s;
+					if(s.indexOf(':') < 0){
+						releaseDate = s;
+					}
 				}
 				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
 					inputLine = in.readLine();
@@ -171,7 +173,7 @@ public class Worker {
 					inputLine = in.readLine();
 					inputLine = in.readLine();
 					
-					artistName = inputLine.substring(inputLine.indexOf("we-link-to link")+17, inputLine.indexOf("</a>"))
+					artistName = inputLine.substring(inputLine.indexOf("class=\"link\">")+13, inputLine.indexOf("</a>"))
 							.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 				}
 				if(inputLine.contains("product-hero__tracks") && tracksParsed == false){ // MAIN TRACK TABLE

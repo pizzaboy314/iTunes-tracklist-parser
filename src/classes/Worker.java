@@ -166,8 +166,14 @@ public class Worker {
 				}
 				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
 					inputLine = in.readLine();
+					String s = inputLine;
 					
-					albumTitle = inputLine.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
+					if(inputLine.contains("<span")){
+						s = s.substring(s.indexOf("we-imageafter__text")+22);
+						s = s.substring(0,s.indexOf("</span>"));
+						inputLine = in.readLine();
+					} 
+					albumTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
 					
 					inputLine = in.readLine();
 					inputLine = in.readLine();
@@ -202,6 +208,9 @@ public class Worker {
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
+							if(inputLine.contains("<img")){
+								inputLine = in.readLine();
+							}
 							inputLine = in.readLine();
 							if(inputLine.contains("<img")){
 								inputLine = in.readLine();

@@ -14,23 +14,23 @@ example
 given an input of https://itunes.apple.com/us/album/innerspeaker/id1087528731 the application will output:   
 
 ```
-Tame Impala   
-InnerSpeaker   
-Aug 16, 2011   
+Tame Impala
+InnerSpeaker
+May 21, 2010
 
-1|It Is Not Meant to Be|5:22   
-2|Desire Be Desire Go|4:26   
-3|Alter Ego|4:47   
-4|Lucidity|4:31   
-5|Why Won't You Make up Your Mind?|3:19   
-6|Solitude Is Bliss|3:55   
-7|Jeremy's Storm|5:28   
-8|Expectation|6:02   
-9|The Bold Arrow of Time|3:48   
-10|Runway Houses City Clouds|7:15   
-11|I Don't Really Mind|3:46   
+1|It Is Not Meant to Be|5:22
+2|Desire Be Desire Go|4:26
+3|Alter Ego|4:47
+4|Lucidity|4:31
+5|Why Won't You Make up Your Mind?|3:19
+6|Solitude Is Bliss|3:55
+7|Jeremy's Storm|5:28
+8|Expectation|6:02
+9|The Bold Arrow of Time|3:48
+10|Runway Houses City Clouds|7:15
+11|I Don't Really Mind|3:46
 
-Source URL:   
+Source URL:
 https://itunes.apple.com/us/album/innerspeaker/id1087528731
 
 Artwork downloaded to Downloads/covers.

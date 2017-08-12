@@ -186,7 +186,7 @@ public class Worker {
 					Integer lastTrackNum = 0;
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("table__row__number t-table-body")){ // a track line in table
+						if(inputLine.contains("table__row__track t-table-body")){ // a track line in table
 							Integer trackNum;
 							String trackTitle;
 							String trackDuration;
@@ -194,9 +194,11 @@ public class Worker {
 							if(inputLine.contains("<img")){
 								inputLine = in.readLine();
 							}
+							inputLine = in.readLine();
 
 							// track number
-							trackNum = Integer.parseInt(inputLine.substring(inputLine.indexOf("we-media-preview ember-view")+37));
+							trackNum = Integer.parseInt(inputLine.trim());
+							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();

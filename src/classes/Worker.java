@@ -165,17 +165,18 @@ public class Worker {
 					}
 				}
 				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
-					inputLine = in.readLine();
+//					inputLine = in.readLine();
 					String s = inputLine;
+					s = s.substring(inputLine.indexOf("\">")+2, inputLine.indexOf("</h1>"));
+					albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
 					
-					if(inputLine.contains("<span")){
-						s = s.substring(s.indexOf("we-imageafter__text")+22);
-						s = s.substring(0,s.indexOf("</span>"));
-						inputLine = in.readLine();
-					} 
-					albumTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
+					// i think this was for a separate explicit svg
+//					if(inputLine.contains("<span")){ 
+//						s = s.substring(s.indexOf("we-imageafter__text")+22);
+//						s = s.substring(0,s.indexOf("</span>"));
+//						inputLine = in.readLine();
+//					} 
 					
-					inputLine = in.readLine();
 					inputLine = in.readLine();
 					inputLine = in.readLine();
 					
@@ -203,20 +204,26 @@ public class Worker {
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
+							inputLine = in.readLine();
 							
 							// track title
-							String s = inputLine.substring(inputLine.indexOf("t-table-headline we-truncate we-truncate--single-line ember-view") + 68);
-							trackTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
+							String s = inputLine.substring(inputLine.indexOf("ember-view\">") + 13);
+							trackTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
-							if(inputLine.contains("<img")){
-								inputLine = in.readLine();
-							}
-							inputLine = in.readLine();
-							if(inputLine.contains("<img")){
-								inputLine = in.readLine();
-							}
+							
+							// i think this was for a separate explicit svg
+//							if(inputLine.contains("<img")){
+//								inputLine = in.readLine();
+//							}
+//							inputLine = in.readLine();
+//							if(inputLine.contains("<img")){
+//								inputLine = in.readLine();
+//							}
+							
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							

@@ -157,31 +157,23 @@ public class Worker {
 			String inputLine = in.readLine();
 			while (inputLine != null) {
 				// PARSING STARTS HERE
-				if (inputLine.contains("data-test-we-datetime datetime")) {
-					String s = inputLine.substring(inputLine.indexOf("data-test-we-datetime datetime")+30);
-					s = s.substring(s.indexOf("\">")+2, s.indexOf("</time>"));
-					if(s.indexOf(':') < 0){
-						releaseDate = s;
-					}
-				}
 				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
-//					inputLine = in.readLine();
 					String s = inputLine;
 					s = s.substring(inputLine.indexOf("\">")+2, inputLine.indexOf("</h1>"));
 					albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
-					
-					// i think this was for a separate explicit svg
-//					if(inputLine.contains("<span")){ 
-//						s = s.substring(s.indexOf("we-imageafter__text")+22);
-//						s = s.substring(0,s.indexOf("</span>"));
-//						inputLine = in.readLine();
-//					} 
 					
 					inputLine = in.readLine();
 					inputLine = in.readLine();
 					
 					artistName = inputLine.substring(inputLine.indexOf("class=\"link\">")+13, inputLine.indexOf("</a>"))
 							.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
+				}
+				if (inputLine.contains("data-test-we-datetime datetime")) { // release date
+					String s = inputLine.substring(inputLine.indexOf("data-test-we-datetime datetime")+30);
+					s = s.substring(s.indexOf("\">")+2, s.indexOf("</time>"));
+					if(s.indexOf(':') < 0){
+						releaseDate = s;
+					}
 				}
 				if(inputLine.contains("product-hero__tracks") && tracksParsed == false){ // MAIN TRACK TABLE
 					Integer lastTrackNum = 0;
@@ -251,8 +243,10 @@ public class Worker {
 				if (inputLine.contains("product-artwork we-artwork--fullwidth we-artwork ember-view")) {
 					String thumbnailURL = inputLine.substring(inputLine.indexOf("<source srcset") + 16,
 							inputLine.indexOf(" 1x"));
-					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/source"));
-					albumArworkURL = "http://is5.mzstatic.com/image/thumb/" + artworkID + "/source/100000x100000-999.jpg";
+					albumArworkURL = thumbnailURL.replace("313x0w", "9999x0w");
+					// old artwork with /source
+//					String artworkID = thumbnailURL.substring(thumbnailURL.indexOf("Music"), thumbnailURL.indexOf("/source"));
+//					albumArworkURL = "http://is5.mzstatic.com/image/thumb/" + artworkID + "/source/100000x100000-999.jpg";
 				}
 
 				inputLine = in.readLine();

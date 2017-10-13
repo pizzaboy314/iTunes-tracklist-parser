@@ -183,12 +183,18 @@ public class Worker {
 							Integer trackNum;
 							String trackTitle;
 							String trackDuration;
+							
 							inputLine = in.readLine();
 							if(inputLine.contains("<img")){
 								inputLine = in.readLine();
 							}
 							inputLine = in.readLine();
 
+							// sometimes there's an extra span with an icon before the track number
+							if(inputLine.contains("button")){
+								inputLine = in.readLine();
+							}
+							
 							// track number
 							trackNum = Integer.parseInt(inputLine.trim());
 							inputLine = in.readLine();

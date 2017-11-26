@@ -185,10 +185,10 @@ public class Worker {
 							String trackDuration;
 							
 							inputLine = in.readLine();
-							if(inputLine.contains("<img")){
+							if(inputLine.contains("<img") || inputLine.contains("table__row__star-rating") ){
 								inputLine = in.readLine();
 							}
-							inputLine = in.readLine();
+//							inputLine = in.readLine(); span used to be on next line after potential button
 
 							// sometimes there's an extra span with an icon before the track number
 							if(inputLine.contains("button")){

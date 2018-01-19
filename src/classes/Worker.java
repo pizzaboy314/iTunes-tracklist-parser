@@ -157,7 +157,7 @@ public class Worker {
 			String inputLine = in.readLine();
 			while (inputLine != null) {
 				// PARSING STARTS HERE
-				if(inputLine.contains("t-hero-headline")){ // grab album title and artist name
+				if(inputLine.contains("product-header__title")){ // grab album title and artist name
 					String s = inputLine;
 					s = s.substring(inputLine.indexOf("\">")+2, inputLine.indexOf("</h1>"));
 					albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
@@ -179,7 +179,7 @@ public class Worker {
 					Integer lastTrackNum = 0;
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("table__row__track t-table-body")){ // a track line in table
+						if(inputLine.contains("table__row__track")){ // a track line in table
 							Integer trackNum;
 							String trackTitle;
 							String trackDuration;
@@ -226,7 +226,7 @@ public class Worker {
 							inputLine = in.readLine();
 							
 							// track duration
-							trackDuration = inputLine.substring(inputLine.indexOf("table__row__duration t-table-body")+35,inputLine.indexOf("</td>")).replace("<!---->","n/a");
+							trackDuration = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</td>")).replace("<!---->","n/a");
 							
 							if(trackNum < lastTrackNum){
 								discCount++;

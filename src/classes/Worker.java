@@ -205,6 +205,7 @@ public class Worker {
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							inputLine = in.readLine();
+							inputLine = in.readLine();
 							
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("ember-view\">") + 13);
@@ -213,7 +214,7 @@ public class Worker {
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							
-							// i think this was for a separate explicit svg
+							// i think this was for a separate explicit svgtable__row__track
 //							if(inputLine.contains("<img")){
 //								inputLine = in.readLine();
 //							}

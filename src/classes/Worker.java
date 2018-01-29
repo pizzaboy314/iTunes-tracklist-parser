@@ -225,6 +225,7 @@ public class Worker {
 							
 							inputLine = in.readLine();
 							inputLine = in.readLine();
+							inputLine = in.readLine();
 							
 							// track duration
 							trackDuration = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</td>")).replace("<!---->","n/a");

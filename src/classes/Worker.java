@@ -205,7 +205,8 @@ public class Worker {
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("ember-view\">") + 13);
 							trackTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
-									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç");
+									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü").replace("á¯", "ï")
+									.replace("á¨", "è");
 							inputLine = in.readLine();
 							inputLine = in.readLine();
 							

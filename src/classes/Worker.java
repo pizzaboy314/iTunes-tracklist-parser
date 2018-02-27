@@ -197,15 +197,10 @@ public class Worker {
 							
 							// track number
 							trackNum = Integer.parseInt(inputLine.trim());
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
+							
+							while(!inputLine.contains("table__row__headline")) {
+								inputLine = in.readLine();
+							}
 							
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("ember-view\">") + 13);

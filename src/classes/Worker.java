@@ -207,21 +207,10 @@ public class Worker {
 							trackTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü").replace("á¯", "ï")
 									.replace("á¨", "è");
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							
-							// i think this was for a separate explicit svgtable__row__track
-//							if(inputLine.contains("<img")){
-//								inputLine = in.readLine();
-//							}
-//							inputLine = in.readLine();
-//							if(inputLine.contains("<img")){
-//								inputLine = in.readLine();
-//							}
-							
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							inputLine = in.readLine();
+
+							while(!inputLine.contains("table__row__duration")) {
+								inputLine = in.readLine();
+							}
 							
 							// track duration
 							trackDuration = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</td>")).replace("<!---->","n/a");

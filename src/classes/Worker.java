@@ -165,13 +165,12 @@ public class Worker {
 					inputLine = in.readLine();
 					inputLine = in.readLine();
 					
-					artistName = inputLine.substring(inputLine.indexOf("class=\"link\">")+13, inputLine.indexOf("</a>"))
+					artistName = inputLine.substring(inputLine.indexOf("LinkToArtist")+21, inputLine.indexOf("</a>"))
 							.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 				}
-				if (inputLine.contains("data-test-we-datetime datetime")) { // release date
-					String s = inputLine.substring(inputLine.indexOf("data-test-we-datetime datetime")+30);
-					s = s.substring(s.indexOf("\">")+2, s.indexOf("</time>"));
-					if(s.indexOf(':') < 0){
+				if (inputLine.contains("link-list__item--released")) { // release date
+					String s = inputLine.substring(inputLine.indexOf("link-list__item__date")+23, inputLine.indexOf("</span>"));
+					if(s.indexOf(':') < 0){ // idk what this is for
 						releaseDate = s;
 					}
 				}

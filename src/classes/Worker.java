@@ -32,6 +32,22 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/*
+ * EXAMPLES
+ * 
+ * EP:
+ * https://itunes.apple.com/us/album/aromatic-ep/1325214121
+ * 
+ * Features: 
+ * https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289
+ * 
+ * Foreign Characters:
+ * https://itunes.apple.com/br/album/pedro-alt%C3%A9rio-bruno-piazza/577195766
+ * 
+ * Two Disc:
+ * https://itunes.apple.com/us/album/why-mountains-are-black-primeval-greek-village-music/1069921584
+ */
+
 
 public class Worker {
 
@@ -44,6 +60,7 @@ public class Worker {
 	private static Integer discCount;
 	private static String artistName;
 	private static String albumTitle;
+	private static String albumType;
 	private static String releaseDate;
 	private static String albumArworkURL;
 	private static List<AlbumTrack> tracklist;
@@ -54,6 +71,7 @@ public class Worker {
 		discCount = 1;
 		artistName = "";
 		albumTitle = "";
+		albumType = "Album";
 		releaseDate = "";
 		albumArworkURL = "";
 		tracklist = new ArrayList<AlbumTrack>();
@@ -74,8 +92,8 @@ public class Worker {
 		parseHTML(albumURL);
 		downloadArtwork();
 		
-		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\n" + tracklistAsText() + "\nSource URL:\n" + albumURL
-				+ "\n\nArtwork downloaded to Downloads/covers.";
+		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\nType: " + albumType + "\n\n" +tracklistAsText() + "\nSource URL:\n" + albumURL
+				+ "\n\nArtwork automatically downloaded to Downloads/covers.";
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -171,11 +189,20 @@ public class Worker {
 					while(loop == true){
 						if(inputLine.contains("<h1 ")){
 							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
+							if(s.contains("- EP")) {
+								albumType = "EP";
+								s = s.replace("- EP", "").trim();
+							}
 							albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 							
 							inputLine = in.readLine();
 							inputLine = in.readLine();
-							String a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>"));
+							String a;
+							if(inputLine.contains("<a ")) {
+								a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>"));
+							} else {
+								a = inputLine.trim();
+							}
 							artistName = a.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 							loop = false;
 						} else {

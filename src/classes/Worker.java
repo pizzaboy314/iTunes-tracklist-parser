@@ -3,6 +3,7 @@ package classes;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -64,6 +72,8 @@ public class Worker {
 	private static String releaseDate;
 	private static String albumArworkURL;
 	private static List<AlbumTrack> tracklist;
+	private static Map<String, String> features;
+	private static int featurePadBase;
 
 	public static void main(String[] args) {
 		resultWindow();
@@ -75,6 +85,8 @@ public class Worker {
 		releaseDate = "";
 		albumArworkURL = "";
 		tracklist = new ArrayList<AlbumTrack>();
+		features = new HashMap<String, String>();
+		featurePadBase = 0;
 
 		String albumURL = null;
 		
@@ -82,7 +94,7 @@ public class Worker {
 		System.out.println();
 		
 		albumURL = (String) JOptionPane.showInputDialog(null,
-				"Enter Apple Music album url: \n(Example: https://itunes.apple.com/us/album/abbey-road/id401186200)", "Enter Apple Music album url",
+				"Enter Apple Music album url: \n(Example: https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289)", "Enter Apple Music album url",
 				JOptionPane.PLAIN_MESSAGE, null, null, null);
 
 		if (albumURL == null || albumURL.equals("")) {
@@ -92,8 +104,10 @@ public class Worker {
 		parseHTML(albumURL);
 		downloadArtwork();
 		
-		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\nType: " + albumType + "\n\n" +tracklistAsText() + "\nSource URL:\n" + albumURL
+		resultString = artistName + "\n" + albumTitle + "\n" + releaseDate + "\n\nType: " + albumType + "\n\n" +tracklistAsText() + 
+				featuresAsText() + "Source URL:\n" + albumURL
 				+ "\n\nArtwork automatically downloaded to Downloads/covers.";
+		
 		resultText.setText(resultString);
 		resultFrame.setVisible(true);
 		resultFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -127,7 +141,76 @@ public class Worker {
 			String discPrefix = (discCount == 1) ? "" : (at.discNum + ".");
 			sb.append(discPrefix + at.trackNum + "|" + at.trackTitle + "|" + at.trackDuration + "\n");
 		}
-		return sb.toString();
+		return sb.toString()+"\n";
+	}
+	
+	public static String featuresAsText(){
+		StringBuilder sb = new StringBuilder();
+		String format = "%1$-" + (featurePadBase+1) + "s %2$1s";
+		sortFeaturesByValues();
+		
+		sb.append("Track Features\n");
+		Iterator itr = features.entrySet().iterator();
+		while (itr.hasNext()) {
+	        Map.Entry pair = (Map.Entry)itr.next();
+	        String line = String.format(format, pair.getKey() + ":", pair.getValue()) + "\n";
+	        sb.append(line);
+	    }
+		
+		if(features.isEmpty()) {
+			return "\n";
+		} else {
+			return sb.toString() + "\n";
+		}
+	}
+	
+	// https://beginnersbook.com/2013/12/how-to-sort-hashmap-in-java-by-keys-and-values/
+	@SuppressWarnings("unchecked")
+	private static void sortFeaturesByValues() {
+		List list = new LinkedList(features.entrySet());
+		
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+
+		HashMap sortedHashMap = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			sortedHashMap.put(entry.getKey(), entry.getValue());
+		}
+		features = sortedHashMap;
+	}
+	
+	public static void parseFeatures(String trackFeatureList, int trackNum) {
+		if(trackFeatureList.contains("&")) {
+			String[] arr1 = trackFeatureList.split(",");
+			for(String name1 : arr1) {
+				if(name1.contains(" & ")) {
+					String[] arr2 = name1.split("&");
+					for(String name2 : arr2) {
+						addFeature(name2.trim(), trackNum);
+					}
+				} else {
+					addFeature(name1.trim(), trackNum);
+				}
+			}
+		} else {
+			addFeature(trackFeatureList, trackNum);
+		}
+	}
+	
+	public static void addFeature(String name, int trackNum) {
+		if(features.get(name) == null) { // new featured name
+			features.put(name, trackNum+"");
+		} else { // existing featured name
+			features.put(name, features.get(name) + "," + trackNum);
+		}
+		
+		if(name.length() > featurePadBase) {
+			featurePadBase = name.length();
+		}
 	}
 
 	public static void parseHTML(String input) {
@@ -230,11 +313,24 @@ public class Worker {
 							while(!inputLine.contains("table__row__headline ")) {
 								inputLine = in.readLine();
 							}
-							
+							// TODO
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("\">") + 2);
-							trackTitle = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
+							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü").replace("á¯", "ï").replace("á¨", "è");
+							if(s.contains("(feat.") || s.contains("[feat.")) {
+								String features = s.substring(s.indexOf("feat.")+5, s.length()-1);
+								if(features.contains(")")) {
+									features = features.substring(0, features.indexOf(")"));
+								} else if(features.contains("]")) {
+									features = features.substring(0, features.indexOf("]"));
+								}
+								
+								s = s.substring(0, s.indexOf(features)-6).trim();
+								parseFeatures(features.trim(), trackNum);
+							}
+							
+							trackTitle = s;
 							
 							while(!inputLine.contains("table__row__duration ")) {
 								inputLine = in.readLine();
@@ -288,12 +384,13 @@ public class Worker {
 		fc.setFileFilter(filter);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension frameSize = new Dimension((int) (screenSize.width / 2), (int) (screenSize.height / 2));
-		int x = (int) (frameSize.width / 2);
-		int y = (int) (frameSize.height / 2);
-		resultFrame.setBounds(x, y, 600, frameSize.height);
+		Dimension frameSize = new Dimension(600, (int) (screenSize.height - (screenSize.height / 5)));
+		int x = (int) ((screenSize.width / 2) - (frameSize.width / 2));
+		int y = (int) (screenSize.height - frameSize.height - 100);
+		resultFrame.setBounds(x, y, frameSize.width, frameSize.height);
 
 		resultText = new JTextArea();
+		resultText.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		resultText.setText("");
 		resultText.setEditable(false);
 

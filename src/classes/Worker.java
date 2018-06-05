@@ -50,7 +50,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289
  * 
  * Foreign Characters:
- * https://itunes.apple.com/br/album/pedro-alt%C3%A9rio-bruno-piazza/577195766
+ * https://itunes.apple.com/us/album/pedro-alt%C3%A9rio-bruno-piazza/577195766
  * 
  * Two Disc:
  * https://itunes.apple.com/us/album/why-mountains-are-black-primeval-greek-village-music/1069921584
@@ -317,7 +317,8 @@ public class Worker {
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("\">") + 2);
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
-									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü").replace("á¯", "ï").replace("á¨", "è");
+									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü")
+									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú").replace("á§", "ç");
 							if(s.contains("(feat.") || s.contains("[feat.")) {
 								String features = s.substring(s.indexOf("feat.")+5, s.length()-1);
 								if(features.contains(")")) {

@@ -5,33 +5,50 @@ the advanced tracklist input for adding a new album to the site is of the format
 
 TRACK NUM|TRACK NAME|TRACK DURATION
 
-i was using iTunes as a source for a while, and getting it into that format through text manipulation.   
-but that's stupid so I wrote this app, which gives you artist name, album title, release date, the full tracklist in the correct format, and automatically downloads the album artwork in high resolution.
+I was using Apple Music album URLs as a source for a while, and getting it into that format through text manipulation.   
+But that's stupid so I wrote this app, which gives you artist name, album title, release date, album type, the full tracklist in the correct format, a full list of featured artists, and automatically downloads the album artwork in high resolution.
 
 example
 ---
 
-given an input of https://itunes.apple.com/us/album/innerspeaker/id1087528731 the application will output:   
+given an input of https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289 the application will output:   
 
 ```
-Tame Impala
-InnerSpeaker
-May 21, 2010
+Kendrick Lamar
+To Pimp a Butterfly
+Mar 16, 2015
 
-1|It Is Not Meant to Be|5:22
-2|Desire Be Desire Go|4:26
-3|Alter Ego|4:47
-4|Lucidity|4:31
-5|Why Won't You Make up Your Mind?|3:19
-6|Solitude Is Bliss|3:55
-7|Jeremy's Storm|5:28
-8|Expectation|6:02
-9|The Bold Arrow of Time|3:48
-10|Runway Houses City Clouds|7:15
-11|I Don't Really Mind|3:46
+Type: Album
+
+1|Wesley's Theory|4:47
+2|For Free? (Interlude)|2:10
+3|King Kunta|3:54
+4|Institutionalized|4:31
+5|These Walls|5:00
+6|u|4:28
+7|Alright|3:39
+8|For Sale? (Interlude)|4:51
+9|Momma|4:43
+10|Hood Politics|4:52
+11|How Much a Dollar Cost|4:21
+12|Complexion (A Zulu Love)|4:23
+13|The Blacker the Berry|5:28
+14|You Ain't Gotta Lie (Momma Said)|4:01
+15|i|5:36
+16|Mortal Man|12:07
+
+Track Features
+George Clinton:   1
+Thundercat:       1,5
+James Fauntleroy: 11
+Ronald Isley:     11
+Rapsody:          12
+Snoop Dogg:       4
+Bilal:            4,5
+Anna Wise:        4,5
 
 Source URL:
-https://itunes.apple.com/us/album/innerspeaker/id1087528731
+https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289
 
-Artwork downloaded to Downloads/covers.
+Artwork automatically downloaded to Downloads/covers.
 ```

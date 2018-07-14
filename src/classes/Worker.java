@@ -339,8 +339,8 @@ public class Worker {
 							
 							
 							// track duration
-							s = inputLine.substring(inputLine.indexOf("\">") + 2);
-							trackDuration = s.substring(0,s.indexOf("</td>"));
+							s = inputLine.substring(inputLine.indexOf("counter\">") + 9);
+							trackDuration = s.substring(0,s.indexOf("</time>"));
 							
 							if(trackNum < lastTrackNum){
 								discCount++;

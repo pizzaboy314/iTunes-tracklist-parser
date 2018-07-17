@@ -270,8 +270,8 @@ public class Worker {
 				if (inputLine.contains("product-header ")) {
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("<h1 ")){
-							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</h1>"));
+						if(inputLine.contains("<span") && inputLine.contains("product-header__title")){
+							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</"));
 							if(s.contains("- EP")) {
 								albumType = "EP";
 								s = s.replace("- EP", "").trim();
@@ -339,7 +339,7 @@ public class Worker {
 							
 							
 							// track duration
-							s = inputLine.substring(inputLine.indexOf("counter\">") + 9);
+							s = inputLine.substring(inputLine.indexOf("counter\" >") + 10);
 							trackDuration = s.substring(0,s.indexOf("</time>"));
 							
 							if(trackNum < lastTrackNum){

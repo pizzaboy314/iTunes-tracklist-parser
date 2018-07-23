@@ -282,7 +282,11 @@ public class Worker {
 							inputLine = in.readLine();
 							String a;
 							if(inputLine.contains("<a ")) {
-								a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>"));
+								if(inputLine.contains("LinkToArtist")) {
+									a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>"));
+								} else {
+									a = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</a>"));
+								}
 							} else {
 								a = inputLine.trim();
 							}
@@ -313,7 +317,7 @@ public class Worker {
 							while(!inputLine.contains("table__row__headline ")) {
 								inputLine = in.readLine();
 							}
-							// TODO
+							
 							// track title
 							String s = inputLine.substring(inputLine.indexOf("\">") + 2);
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
@@ -361,8 +365,11 @@ public class Worker {
 					}
 				}
 				if (inputLine.contains("product-artwork") && albumArworkURL.equals("")) {
-					String artworkID = inputLine.substring(inputLine.indexOf("<source srcset=\"") + 16, inputLine.indexOf(".jpg/") + 4);
-					albumArworkURL = artworkID + "/9999x0w.jpg";
+					while(!inputLine.contains("<source srcset=\"")) {
+						inputLine = in.readLine();
+					}
+					String artworkID = inputLine.substring(inputLine.indexOf("<source srcset=\"") + 16, inputLine.indexOf("0w.jpg") + 6);
+					albumArworkURL = artworkID.replaceAll("\\d\\d\\dx", "9999x");
 				}
 
 				inputLine = in.readLine();

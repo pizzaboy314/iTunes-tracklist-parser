@@ -369,7 +369,8 @@ public class Worker {
 						inputLine = in.readLine();
 					}
 					String artworkID = inputLine.substring(inputLine.indexOf("<source srcset=\"") + 16, inputLine.indexOf("0w.jpg") + 6);
-					albumArworkURL = artworkID.replaceAll("\\d\\d\\dx", "9999x");
+					albumArworkURL = artworkID.replaceAll("/\\d\\d\\dx", "/9999x");
+					System.out.println(albumArworkURL);
 				}
 
 				inputLine = in.readLine();

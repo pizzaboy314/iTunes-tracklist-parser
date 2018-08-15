@@ -265,6 +265,11 @@ public class Worker {
 					s = s.substring(s.indexOf(">") + 1);
 					releaseDate = s;
 				}
+				
+				// for pre-release
+				if(inputLine.contains("Pre-Order:") && inputLine.contains("Expected")) {
+					releaseDate = inputLine.substring(inputLine.indexOf("Expected")+8).trim();
+				}
 
 				// grab album title and artist name
 				if (inputLine.contains("product-header ")) {
@@ -322,7 +327,8 @@ public class Worker {
 							String s = inputLine.substring(inputLine.indexOf("\">") + 2);
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü")
-									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú").replace("á§", "ç");
+									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú")
+									.replace("á§", "ç").replace("á…", "Å");
 							if(s.contains("(feat.") || s.contains("[feat.")) {
 								String features = s.substring(s.indexOf("feat.")+5, s.length()-1);
 								if(features.contains(")")) {
@@ -344,7 +350,7 @@ public class Worker {
 							
 							// track duration
 							s = inputLine.substring(inputLine.indexOf("counter\" >") + 10);
-							trackDuration = s.substring(0,s.indexOf("</time>"));
+							trackDuration = (s.contains("</time>")) ? s.substring(0,s.indexOf("</time>")) : "";
 							
 							if(trackNum < lastTrackNum){
 								discCount++;

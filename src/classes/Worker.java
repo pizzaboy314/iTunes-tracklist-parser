@@ -371,10 +371,10 @@ public class Worker {
 					}
 				}
 				if (inputLine.contains("product-artwork") && albumArworkURL.equals("")) {
-					while(!inputLine.contains("<source srcset=\"")) {
+					while(!inputLine.contains("class=\"we-artwork__source\" srcset=\"")) {
 						inputLine = in.readLine();
 					}
-					String artworkID = inputLine.substring(inputLine.indexOf("<source srcset=\"") + 16, inputLine.indexOf("0w.jpg") + 6);
+					String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, inputLine.indexOf("0w.jpg") + 6);
 					albumArworkURL = artworkID.replaceAll("/\\d\\d\\dx", "/9999x");
 					System.out.println(albumArworkURL);
 				}

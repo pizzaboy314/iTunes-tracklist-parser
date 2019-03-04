@@ -288,7 +288,9 @@ public class Worker {
 							String a;
 							if(inputLine.contains("<a ")) {
 								if(inputLine.contains("LinkToArtist")) {
-									a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>"));
+//									a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>")); one liner old now
+									inputLine = in.readLine();
+									a = inputLine.trim();
 								} else {
 									a = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</a>"));
 								}

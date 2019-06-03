@@ -276,7 +276,7 @@ public class Worker {
 					boolean loop = true;
 					while(loop == true){
 						if(inputLine.contains("<span") && inputLine.contains("product-header__title")){
-							String s = inputLine.substring(inputLine.indexOf("name>")+5,inputLine.indexOf("</"));
+							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</"));
 							if(s.contains("- EP")) {
 								albumType = "EP";
 								s = s.replace("- EP", "").trim();
@@ -326,7 +326,7 @@ public class Worker {
 							}
 							
 							// track title
-							String s = inputLine.substring(inputLine.indexOf("name>") + 5);
+							String s = inputLine.substring(inputLine.indexOf("headline\">") + 10);
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü")
 									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú")

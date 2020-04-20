@@ -260,10 +260,9 @@ public class Worker {
 				// PARSING STARTS HERE
 
 				// grab release date
-				if (inputLine.contains("link-list__item--released")) {
-					String s = inputLine.substring(inputLine.indexOf("Released:"), inputLine.indexOf("</span>"));
-					s = s.substring(s.indexOf(">") + 1);
-					releaseDate = s;
+				if (inputLine.contains("<span>Released")) {
+					inputLine = in.readLine();
+					releaseDate = inputLine.trim();
 				}
 				
 				// for pre-release

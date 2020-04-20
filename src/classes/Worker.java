@@ -272,65 +272,61 @@ public class Worker {
 				}
 
 				// grab album title and artist name
-				if (inputLine.contains("product-header ")) {
+				if (inputLine.contains("header-and-songs-list")) {
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("<span") && inputLine.contains("product-header__title")){
-							String s = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</"));
+						if(inputLine.contains("product-name")){
+							inputLine = in.readLine();
+							String s = inputLine.trim();
 							if(s.contains("- EP")) {
 								albumType = "EP";
 								s = s.replace("- EP", "").trim();
 							}
 							albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
 							
-							inputLine = in.readLine();
-							inputLine = in.readLine();
-							String a;
-							if(inputLine.contains("<a ")) {
-								if(inputLine.contains("LinkToArtist")) {
-//									a = inputLine.substring(inputLine.indexOf("LinkToArtist&quot;}\">")+21,inputLine.indexOf("</a>")); one liner old now
-									inputLine = in.readLine();
-									a = inputLine.trim();
-								} else {
-									a = inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</a>"));
-								}
-							} else {
-								a = inputLine.trim();
+							while(!inputLine.contains("product-creator")) {
+								inputLine = in.readLine();
 							}
-							artistName = a.replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
+							
+							inputLine = in.readLine();
+							if(inputLine.contains("<span")) {
+								s = inputLine.substring(inputLine.indexOf("default>")+8, inputLine.indexOf("</span>"));
+							} else {
+								inputLine = in.readLine();
+								inputLine = in.readLine();
+								s = inputLine;
+							}
+							artistName = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é");
 							loop = false;
 						} else {
 							inputLine = in.readLine();
 						}
 					}
 				}
-				if(inputLine.contains("product-hero__tracks") && tracksParsed == false){ // MAIN TRACK TABLE
+				if(inputLine.contains("songs-list--album") && tracksParsed == false){ // MAIN TRACK TABLE
 					Integer lastTrackNum = 0;
 					boolean loop = true;
 					while(loop == true){
-						if(inputLine.contains("table__row__track")){ // a track line in table
+						if(inputLine.contains("song-name typography-label")){ // a track line in table
 							Integer trackNum;
 							String trackTitle;
 							String trackDuration;
 							inputLine = in.readLine();
-							if(inputLine.contains("table__row__star-rating")) {
-								inputLine = in.readLine();
-							}
-							inputLine = in.readLine();
-
-							// track number
-							trackNum = Integer.parseInt(inputLine.trim());
-
-							while(!inputLine.contains("table__row__headline ")) {
-								inputLine = in.readLine();
-							}
 							
 							// track title
-							String s = inputLine.substring(inputLine.indexOf("headline\">") + 10);
+							String s = inputLine.substring(7,inputLine.indexOf("</div>"));
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü")
 									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú")
 									.replace("á§", "ç").replace("á…", "Å");
+							
+							// track number
+							while(!inputLine.contains("<div class=\"song-index\">")) {
+								inputLine = in.readLine();
+							}
+							inputLine = in.readLine();
+							trackNum = Integer.parseInt(inputLine.substring(inputLine.indexOf("\">")+2,inputLine.indexOf("</span>")));
+							
 							if(s.contains("(feat.") || s.contains("[feat.")) {
 								String features = s.substring(s.indexOf("feat.")+5, s.length()-1);
 								if(features.contains(")")) {
@@ -345,14 +341,12 @@ public class Worker {
 							
 							trackTitle = s;
 							
-							while(!inputLine.contains("table__row__duration ")) {
+							while(!inputLine.contains("data-test-songs-list-row-time")) {
 								inputLine = in.readLine();
 							}
 							
-							
 							// track duration
-							s = inputLine.substring(inputLine.indexOf("counter\" >") + 10);
-							trackDuration = (s.contains("</time>")) ? s.substring(0,s.indexOf("</time>")) : "";
+							trackDuration = inputLine.substring(inputLine.indexOf("time>")+5,inputLine.indexOf("</div>"));
 							
 							if(trackNum < lastTrackNum){
 								discCount++;
@@ -365,19 +359,19 @@ public class Worker {
 						} else {
 							inputLine = in.readLine();
 						}
-						if(inputLine.contains("</table>")){ // end of track table
+						if(inputLine.contains("bottom-metadata")){ // end of track table
 							loop = false;
 							tracksParsed = true;
 							Collections.sort(tracklist);
 						}
 					}
 				}
-				if (inputLine.contains("product-artwork") && albumArworkURL.equals("")) {
-					while(!inputLine.contains("class=\"we-artwork__source\" srcset=\"")) {
+				if (inputLine.contains("product-info") && albumArworkURL.equals("")) {
+					while(!inputLine.contains("class=\"media-artwork-v2__image\"")) {
 						inputLine = in.readLine();
 					}
-					String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, inputLine.indexOf("0w.jpg") + 6);
-					albumArworkURL = artworkID.replaceAll("/\\d\\d\\dx", "/9999x");
+					String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, inputLine.indexOf("270w")).trim();
+					albumArworkURL = artworkID.replaceAll("270x270bb", "9999x9999bb");
 					System.out.println(albumArworkURL);
 				}
 

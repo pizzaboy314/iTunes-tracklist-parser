@@ -313,7 +313,9 @@ public class Worker {
 							inputLine = in.readLine();
 							
 							// track title
-							String s = inputLine.substring(7,inputLine.indexOf("</div>"));
+							int start = inputLine.contains("</svg>") ? inputLine.indexOf("</svg>")+6 : inputLine.indexOf(">")+1;
+							Boolean video = inputLine.contains("</svg>");
+							String s = inputLine.substring(start,inputLine.indexOf("</div>"));
 							s = s.trim().replace("&amp;", "&").replace("&quot;", "'").replace("â€™", "'").replace("Ã©", "é").replace("Ã", "á")
 									.replace("Ã£", "ã").replace("Ã³", "ó").replace("Ãº", "ú").replace("Ã§", "ç").replace("á¼", "ü")
 									.replace("á¯", "ï").replace("á¨", "è").replace("á£", "ã").replace("á³", "ó").replace("áº", "ú")
@@ -337,15 +339,18 @@ public class Worker {
 								s = s.substring(0, s.indexOf(features)-6).trim();
 								parseFeatures(features.trim(), trackNum);
 							}
+							if(video) {
+								s = s + " [Video]";
+							}
 							
 							trackTitle = s;
 							
-							while(!inputLine.contains("data-test-songs-list-row-time")) {
+							while(inputLine != null && !inputLine.contains("time-data")) {
 								inputLine = in.readLine();
 							}
 							
 							// track duration
-							trackDuration = inputLine.substring(inputLine.indexOf("time>")+5,inputLine.indexOf("</div>"));
+							trackDuration = inputLine.substring(inputLine.indexOf("time-data\">")+11,inputLine.indexOf("</div>"));
 							
 							if(trackNum < lastTrackNum){
 								discCount++;

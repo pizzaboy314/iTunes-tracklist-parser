@@ -260,7 +260,7 @@ public class Worker {
 				// PARSING STARTS HERE
 
 				// grab release date
-				if (inputLine.contains("<span>Released")) {
+				if (inputLine.contains("<span>RELEASED")) {
 					inputLine = in.readLine();
 					releaseDate = inputLine.trim();
 				}
@@ -350,7 +350,8 @@ public class Worker {
 							}
 							
 							// track duration
-							trackDuration = inputLine.substring(inputLine.indexOf("time-data\">")+11,inputLine.indexOf("</div>"));
+							inputLine = in.readLine();
+							trackDuration = inputLine.trim();
 							
 							if(trackNum < lastTrackNum){
 								discCount++;

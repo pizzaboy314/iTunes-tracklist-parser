@@ -372,7 +372,10 @@ public class Worker {
 					}
 				}
 				if (inputLine.contains("product-info") && albumArworkURL.equals("")) {
-					while(!inputLine.contains("class=\"media-artwork-v2__image\"")) {
+					while(!inputLine.contains("product-lockup__artwork-for-product")) {
+						inputLine = in.readLine();
+					}
+					while(!inputLine.contains("source srcset")) {
 						inputLine = in.readLine();
 					}
 					String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, inputLine.indexOf("270w")).trim();

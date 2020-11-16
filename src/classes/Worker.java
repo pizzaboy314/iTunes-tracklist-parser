@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -378,9 +380,13 @@ public class Worker {
 					while(!inputLine.contains("source srcset")) {
 						inputLine = in.readLine();
 					}
-					String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, inputLine.indexOf("270w")).trim();
-					albumArworkURL = artworkID.replaceAll("270x270bb", "9999x9999bb");
-					System.out.println(albumArworkURL);
+					Pattern pattern = Pattern.compile("\\s\\d\\d\\dw");
+					Matcher matcher = pattern.matcher(inputLine);
+					if (matcher.find()) {
+						String artworkID = inputLine.substring(inputLine.indexOf("srcset=\"") + 8, matcher.start()).trim();
+						albumArworkURL = artworkID.replaceAll("\\d\\d\\dx\\d\\d\\dbb", "9999x9999bb");
+						System.out.println(albumArworkURL);
+					}
 				}
 
 				inputLine = in.readLine();

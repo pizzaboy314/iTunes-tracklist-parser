@@ -46,16 +46,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * EXAMPLES
  * 
  * EP:
- * https://itunes.apple.com/us/album/aromatic-ep/1325214121
+ * https://music.apple.com/us/album/aromatic-ep/1325214121
  * 
  * Features: 
- * https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289
+ * https://music.apple.com/us/album/to-pimp-a-butterfly/974187289
  * 
  * Foreign Characters:
- * https://itunes.apple.com/us/album/pedro-alt%C3%A9rio-bruno-piazza/577195766
+ * https://music.apple.com/us/album/pedro-alt%C3%A9rio-bruno-piazza/577195766
  * 
  * Two Disc:
- * https://itunes.apple.com/us/album/why-mountains-are-black-primeval-greek-village-music/1069921584
+ * https://music.apple.com/us/album/why-mountains-are-black-primeval-greek-village-music/1069921584
  */
 
 

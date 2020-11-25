@@ -5,13 +5,12 @@ the advanced tracklist input for adding a new album to the site is of the format
 
 TRACK NUM|TRACK NAME|TRACK DURATION
 
-I was using Apple Music album URLs as a source for a while, and getting it into that format through text manipulation.   
-But that's stupid so I wrote this app, which gives you artist name, album title, release date, album type, the full tracklist in the correct format, a full list of featured artists, and automatically downloads the album artwork in high resolution.
+Using a Apple Music album URL as a source, this app gives you the artist name, album title, release date, album type, the full tracklist in the correct format, and a full list of featured artists. It also automatically downloads the album artwork in high resolution.
 
 example
 ---
 
-given an input of https://itunes.apple.com/us/album/to-pimp-a-butterfly/974187289 the application will output:   
+given an input of https://music.apple.com/us/album/to-pimp-a-butterfly/974187289 the application will output:   
 
 ```
 Kendrick Lamar

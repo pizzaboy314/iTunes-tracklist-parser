@@ -282,6 +282,9 @@ public class Worker {
 							if(s.contains("- EP")) {
 								albumType = "EP";
 								s = s.replace("- EP", "").trim();
+							} else if(s.contains("(Live)") || s.contains("[Live]")) {
+								albumType = "Live Album";
+								s = s.replace("(Live)", "").replace("[Live]", "").trim();
 							}
 							albumTitle = s.replace("&amp;", "&").replace("&quot;", "'").replace("’", "'").replace("é", "�");
 							
@@ -340,6 +343,9 @@ public class Worker {
 								
 								s = s.substring(0, s.indexOf(features)-6).trim();
 								parseFeatures(features.trim(), trackNum);
+							}
+							if("Live Album".equals(albumType)) {
+								s = s.replace("(Live)", "").replace("[Live]", "").trim();
 							}
 							if(video) {
 								s = s + " [Video]";

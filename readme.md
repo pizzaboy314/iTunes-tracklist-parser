@@ -1,5 +1,7 @@
-[EXECUTABLE DOWNLOAD LINK](https://github.com/pizzaboy314/iTunes-tracklist-parser/raw/master/iTunes-tracklist-parser.jar)
+No longer officially supported; replaced by [this](https://pizzaboy314.github.io/SonemicAppleAlbumParser/) web project
 ---
+[EXECUTABLE DOWNLOAD LINK](https://github.com/pizzaboy314/iTunes-tracklist-parser/raw/master/iTunes-tracklist-parser.jar)
+
 [RYM](https://rateyourmusic.com/) (soon to be Sonemic) is a music site much like IMDb for rating, cataloging, and finding new music.
 the advanced tracklist input for adding a new album to the site is of the format:
 
